@@ -1,0 +1,31 @@
+
+{
+  "manifest_version": 3,
+  "name": "Meet Gesture Reactions",
+  "version": "1.0",
+  "description": "Add gesture-controlled emoji reactions to Google Meet",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://meet.google.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.html", "popup.js", "hand-detection.js"],
+      "matches": ["https://meet.google.com/*"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Meet Gesture Reactions"
+  }
+}

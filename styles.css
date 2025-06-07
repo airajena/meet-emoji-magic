@@ -1,0 +1,206 @@
+
+/* Gesture Control Panel */
+#gesture-control-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-width: 240px;
+  transition: all 0.3s ease;
+}
+
+#gesture-control-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.gesture-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gesture-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  transition: all 0.3s ease;
+}
+
+.status-indicator.active {
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.gesture-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.gesture-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.gesture-btn:active {
+  transform: translateY(0);
+}
+
+.gesture-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.gesture-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #6b7280;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.gesture-hint:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #4f46e5;
+}
+
+.gesture-hint span:first-child {
+  font-size: 16px;
+}
+
+/* Floating Emoji Animations */
+.floating-emoji {
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) rotate(var(--start-rotation, 0deg)) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-20px) rotate(var(--start-rotation, 0deg)) scale(1);
+  }
+  50% {
+    transform: translateY(-150px) rotate(calc(var(--start-rotation, 0deg) + 15deg)) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-300px) rotate(calc(var(--start-rotation, 0deg) + 30deg)) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #gesture-control-panel {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+  }
+  
+  .gesture-panel-content {
+    gap: 10px;
+  }
+  
+  .gesture-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  
+  .floating-emoji {
+    font-size: 32px !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  #gesture-control-panel {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(17, 24, 39, 0.95));
+    border: 1px solid rgba(75, 85, 99, 0.3);
+  }
+  
+  .gesture-status {
+    color: #e5e7eb;
+  }
+  
+  .gesture-hint {
+    color: #9ca3af;
+  }
+  
+  .gesture-hint:hover {
+    background: rgba(102, 126, 234, 0.2);
+    color: #a78bfa;
+  }
+  
+  .gesture-info {
+    border-top: 1px solid rgba(75, 85, 99, 0.3);
+  }
+}
+
+/* Enhanced animations for dramatic effect */
+@keyframes sparkle {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1);
+  }
+  50% { 
+    transform: scale(1.2) rotate(180deg);
+    filter: brightness(1.5);
+  }
+}
+
+.floating-emoji.sparkle {
+  animation: floatUp 4s ease-out forwards, sparkle 0.5s ease-in-out infinite;
+}
+
+/* Performance optimizations */
+#gesture-emoji-container * {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
