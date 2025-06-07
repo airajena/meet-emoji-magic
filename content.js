@@ -1,4 +1,3 @@
-
 class MeetGestureReactions {
   constructor() {
     this.isActive = false;
@@ -10,6 +9,7 @@ class MeetGestureReactions {
     this.gestureStartTime = null;
     this.confidenceThreshold = 0.8;
     this.holdDuration = 800; // ms to hold gesture before triggering
+    this.scriptLoaded = false;
     this.init();
   }
 
@@ -154,12 +154,20 @@ class MeetGestureReactions {
 
   async initHandDetection() {
     try {
+      console.log('Loading MediaPipe Hands library...');
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1633879962/hands.js';
       document.head.appendChild(script);
 
       script.onload = () => {
-        this.setupHandDetection();
+        console.log('MediaPipe script loaded successfully');
+        this.scriptLoaded = true;
+        // Wait a bit for the library to fully initialize
+        setTimeout(() => this.setupHandDetection(), 500);
+      };
+
+      script.onerror = (error) => {
+        console.error('Failed to load MediaPipe script:', error);
       };
     } catch (error) {
       console.error('Failed to load hand detection:', error);
@@ -168,6 +176,15 @@ class MeetGestureReactions {
 
   async setupHandDetection() {
     try {
+      console.log('Setting up hand detection...');
+      
+      // Check if Hands class is available
+      if (typeof Hands === 'undefined') {
+        console.warn('Hands class not available yet, retrying in 1 second...');
+        setTimeout(() => this.setupHandDetection(), 1000);
+        return;
+      }
+
       const hands = new Hands({
         locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1633879962/${file}`
       });
@@ -181,8 +198,11 @@ class MeetGestureReactions {
 
       hands.onResults((results) => this.processHandResults(results));
       this.handDetector = hands;
+      console.log('Hand detection setup completed successfully');
     } catch (error) {
       console.error('Failed to setup hand detection:', error);
+      // Retry after a delay
+      setTimeout(() => this.setupHandDetection(), 2000);
     }
   }
 
@@ -196,6 +216,15 @@ class MeetGestureReactions {
 
   async startGestureDetection() {
     try {
+      console.log('Starting gesture detection...');
+      
+      // Check if hand detector is ready
+      if (!this.handDetector) {
+        console.warn('Hand detector not ready yet');
+        alert('Hand detection is still loading. Please try again in a moment.');
+        return;
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { 
           width: 640, 
@@ -207,15 +236,30 @@ class MeetGestureReactions {
       this.videoElement = document.createElement('video');
       this.videoElement.style.display = 'none';
       this.videoElement.srcObject = stream;
-      this.videoElement.play();
+      
+      // Wait for video to be ready
+      await new Promise((resolve) => {
+        this.videoElement.onloadedmetadata = () => {
+          this.videoElement.play();
+          resolve();
+        };
+      });
+      
       document.body.appendChild(this.videoElement);
 
       this.processVideoFrame();
       this.isActive = true;
       this.updateUI();
+      console.log('Gesture detection started successfully');
     } catch (error) {
       console.error('Failed to start gesture detection:', error);
-      alert('Could not access camera. Please allow camera permissions.');
+      if (error.name === 'NotAllowedError') {
+        alert('Camera access denied. Please allow camera permissions and try again.');
+      } else if (error.name === 'NotFoundError') {
+        alert('No camera found. Please connect a camera and try again.');
+      } else {
+        alert('Could not access camera. Please check your camera settings and try again.');
+      }
     }
   }
 
