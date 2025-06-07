@@ -12,7 +12,7 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   z-index: 9999;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  min-width: 240px;
+  min-width: 260px;
   transition: all 0.3s ease;
 }
 
@@ -55,6 +55,30 @@
   50% { transform: scale(1.2); opacity: 0.8; }
 }
 
+/* Confidence Display */
+.confidence-display {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.confidence-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: #f59e0b;
+  transition: width 0.1s ease, background 0.3s ease;
+  border-radius: 3px;
+}
+
 .gesture-btn {
   display: flex;
   align-items: center;
@@ -95,14 +119,27 @@
   gap: 8px;
   font-size: 12px;
   color: #6b7280;
-  padding: 4px 8px;
+  padding: 6px 8px;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
 }
 
 .gesture-hint:hover {
   background: rgba(102, 126, 234, 0.1);
   color: #4f46e5;
+}
+
+.gesture-hint.detecting {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #047857;
+  animation: gestureDetected 0.6s ease infinite;
+}
+
+@keyframes gestureDetected {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .gesture-hint span:first-child {
@@ -125,13 +162,63 @@
     transform: translateY(-20px) rotate(var(--start-rotation, 0deg)) scale(1);
   }
   50% {
-    transform: translateY(-150px) rotate(calc(var(--start-rotation, 0deg) + 15deg)) scale(1.1);
+    transform: translateY(-150px) rotate(calc(var(--start-rotation, 0deg) + 15deg)) scale(1.2);
     opacity: 1;
   }
   100% {
     transform: translateY(-300px) rotate(calc(var(--start-rotation, 0deg) + 30deg)) scale(0.8);
     opacity: 0;
   }
+}
+
+/* Video Overlay Emoji Animations */
+.video-overlay-emoji {
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+@keyframes videoEmojiFloat {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1.2) rotate(10deg);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1) rotate(-5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5) rotate(15deg);
+    opacity: 0;
+  }
+}
+
+/* Enhanced animations for dramatic effect */
+@keyframes sparkle {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  }
+  50% { 
+    transform: scale(1.2) rotate(180deg);
+    filter: brightness(1.5) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+  }
+}
+
+.floating-emoji.sparkle {
+  animation: floatUp 5s ease-out forwards, sparkle 1s ease-in-out infinite;
+}
+
+/* Auto-detection active state */
+.active-hint {
+  opacity: 1;
+}
+
+.gesture-hint:not(.active-hint) {
+  opacity: 0.6;
 }
 
 /* Responsive adjustments */
@@ -180,27 +267,25 @@
   .gesture-info {
     border-top: 1px solid rgba(75, 85, 99, 0.3);
   }
-}
-
-/* Enhanced animations for dramatic effect */
-@keyframes sparkle {
-  0%, 100% { 
-    transform: scale(1) rotate(0deg);
-    filter: brightness(1);
+  
+  .confidence-display {
+    color: #9ca3af;
   }
-  50% { 
-    transform: scale(1.2) rotate(180deg);
-    filter: brightness(1.5);
+  
+  .confidence-bar {
+    background: rgba(75, 85, 99, 0.3);
   }
-}
-
-.floating-emoji.sparkle {
-  animation: floatUp 4s ease-out forwards, sparkle 0.5s ease-in-out infinite;
 }
 
 /* Performance optimizations */
-#gesture-emoji-container * {
+#gesture-emoji-container *, 
+#gesture-video-overlay * {
   will-change: transform, opacity;
   backface-visibility: hidden;
   perspective: 1000px;
+}
+
+/* Video overlay container styling */
+#gesture-video-overlay {
+  border-radius: 8px;
 }

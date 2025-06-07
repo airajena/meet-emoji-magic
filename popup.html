@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <style>
     body {
-      width: 320px;
-      min-height: 240px;
+      width: 340px;
+      min-height: 260px;
       margin: 0;
       padding: 20px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -50,6 +50,16 @@
       font-size: 20px;
     }
     
+    .new-badge {
+      background: #10b981;
+      color: white;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-left: auto;
+    }
+    
     .instructions {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 12px;
@@ -64,35 +74,56 @@
       border-radius: 4px;
       font-weight: 600;
     }
+    
+    .auto-feature {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 0;
+      font-size: 12px;
+    }
+    
+    .auto-feature strong {
+      color: #10b981;
+    }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>🖐️ Meet Gesture Reactions</h1>
-    <p>Add magical emoji reactions to Google Meet</p>
+    <h1>🤖 Auto Gesture Reactions</h1>
+    <p>AI-powered emoji reactions for Google Meet</p>
   </div>
   
   <div class="feature-list">
     <div class="feature">
       <span>👍</span>
-      <span>Thumbs up gesture</span>
+      <span>Auto thumbs up detection</span>
+      <span class="new-badge">AUTO</span>
     </div>
     <div class="feature">
       <span>✌️</span>
-      <span>Peace sign gesture</span>
+      <span>Auto peace sign detection</span>
+      <span class="new-badge">AUTO</span>
     </div>
     <div class="feature">
       <span>👋</span>
-      <span>Wave hand gesture</span>
+      <span>Auto wave detection</span>
+      <span class="new-badge">AUTO</span>
     </div>
+  </div>
+  
+  <div class="auto-feature">
+    <strong>🎯 Smart Detection:</strong> Hold gestures for 0.8 seconds to trigger reactions. Confidence meter shows detection accuracy in real-time!
   </div>
   
   <div class="instructions">
     <strong>How to use:</strong><br>
     1. Join a <span class="highlight">Google Meet</span> call<br>
-    2. Click <span class="highlight">"Start Gestures"</span> in the control panel<br>
+    2. Click <span class="highlight">"Start Auto Gestures"</span><br>
     3. Allow camera access when prompted<br>
-    4. Make gestures to trigger emoji reactions!
+    4. <span class="highlight">Hold gestures clearly</span> until confidence reaches 80%<br>
+    5. Watch emojis appear on your video for all to see!
   </div>
 
   <script src="popup.js"></script>
